@@ -12,7 +12,6 @@ app.use(express.json())
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dakbubs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-// const uri = "mongodb+srv://virtual-bookshelf:WwlJT9wftcNii5Xs@cluster0.dakbubs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -28,7 +27,21 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
+        const database= client.db('virtualBook')
+        const bookCollection= database.collection('addBook')
 
+        app.post('/addBook', async(req, res)=>{
+            console.log('hello',req.body)
+            const addBook= req.body
+            const result= await bookCollection.insertOne(addBook)
+            res.send(result)
+
+        })
+        // all book find
+        app.get('/addBook', async(req, res)=>{
+            const result= await bookCollection.find().toArray()
+            res.send(result)
+        })
 
 
         // Send a ping to confirm a successful connection
