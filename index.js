@@ -74,29 +74,30 @@ async function run() {
 
 
 
+        app.get('/addBook/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await bookCollection.findOne(query);
+            res.send(result);
 
-        // app.get('/addBook/:id', async (req, res) => {
-        //     const id = req.params.id;
+        });
 
-        //     // 🛑 যদি invalid ObjectId পাঠায়
-        //     if (!ObjectId.isValid(id)) {
-        //         return res.status(400).send({ error: "Invalid book ID format" });
-        //     }
+        app.get('/getuserbook', async (req, res) => {
+            const email = req.query.email;
 
-        //     const query = { _id: new ObjectId(id) };
+            if (!email) {
+                return res.status(400).send({ message: "Email is required" });
+            }
 
-        //     try {
-        //         const result = await bookCollection.findOne(query);
+            const result = await bookCollection.find({ user_email: email }).toArray();
+            res.send(result);
+        });
 
-        //         if (!result) {
-        //             return res.status(404).send({ message: "Book not found" });
-        //         }
 
-        //         res.send(result);
-        //     } catch (err) {
-        //         res.status(500).send({ error: err.message });
-        //     }
-        // });
+
+
+
+
 
 
 
