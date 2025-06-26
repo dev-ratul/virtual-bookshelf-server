@@ -84,7 +84,7 @@ async function run() {
             res.send(result);
         });
 
-        // 🔥 REVIEW ROUTES 🔥
+        
 
         app.get('/reviews/:bookId', async (req, res) => {
             const bookId = req.params.bookId;
