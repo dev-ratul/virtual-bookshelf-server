@@ -1,5 +1,5 @@
 
-
+// 
 
 const express = require('express');
 const app = express();
@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const db = client.db('virtualBook');
     const bookCollection = db.collection('addBook');
     const reviewCollection = db.collection('reviews');
@@ -178,7 +178,8 @@ async function run() {
       }
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
+    
     console.log("✅ Connected to MongoDB!");
   } finally {
     // Optionally: client.close()
