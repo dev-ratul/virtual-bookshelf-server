@@ -29,15 +29,16 @@ async function run() {
     const bookCollection = db.collection('addBook');
     const reviewCollection = db.collection('reviews');
     const usersCollection = db.collection('users');
+    const specialOffer= db.collection('specialOffer');
 
-    // Existing routes...
+    // Existing routes....
 
     app.post('/addBook', async (req, res) => {
       const result = await bookCollection.insertOne(req.body);
       res.send(result);
     });
 
-    app.get('/addBook', async (req, res) => {
+    app.get('/all-book', async (req, res) => {
       const result = await bookCollection.find().toArray();
       res.send(result);
     });
@@ -56,6 +57,21 @@ async function run() {
       );
       res.send(result);
     });
+
+    // add special offer 
+    app.post('/add-special-offer', async (req, res)=>{
+      const result = await specialOffer.insertOne(req.body);
+      res.send(result);
+    })
+
+    app.get('/special-offer', async (req, res)=>{
+      const result= await specialOffer.find().limit(8).toArray()
+      res.send(result);
+    })
+    app.get('/all-special-offer', async (req, res)=>{
+      const result= await specialOffer.find().toArray()
+      res.send(result);
+    })
 
     app.get('/getuserbook', async (req, res) => {
       const email = req.query.email;
@@ -85,9 +101,16 @@ async function run() {
     });
 
     app.get('/popularBook', async (req, res) => {
-      const result = await bookCollection.find().sort({ upvote: -1 }).limit(6).toArray();
+      const result = await bookCollection.find().sort({ upvote: -1 }).limit(8).toArray();
       res.send(result);
     });
+
+    app.get('/popularBook/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await bookCollection.findOne({ _id: new ObjectId(id) });
+      res.send(result);
+    });
+
 
     app.get('/reviews/:bookId', async (req, res) => {
       const bookId = req.params.bookId;
@@ -179,7 +202,7 @@ async function run() {
     });
 
     // await client.db("admin").command({ ping: 1 });
-    
+
     console.log("✅ Connected to MongoDB!");
   } finally {
     // Optionally: client.close()
